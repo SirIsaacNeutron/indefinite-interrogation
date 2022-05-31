@@ -6,10 +6,38 @@ body {
 }
 
 .game-header {
-    padding-top: 2%;
+    margin-top: 5%;
     font-size: 4rem;
 }
 
 .menu-question {
+    margin-top: 4%;
     font-size: 2rem;
+}
+
+.game-buttons {
+    margin: auto;
+    /* width: 600px; */
+    width: 50%;
+    height: 400px;
+    background: red;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px 20px;
+}
+
+.button {
+    margin: auto;
+    background: white;
+    color: black;
+    padding: 3%;
+}
+
+.col {
+    margin-bottom: 3%;
+}
+
+#audio {
+    display: none;
 }

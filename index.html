@@ -2,16 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300&display=swap" rel="stylesheet">
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
     <link rel="stylesheet" href="styles.css">
     <title>Indefinite Interrogation</title>
 </head>
 <body>
     <h1 class="game-header">Indefinite</h1>
     <p class="menu-question">Ready to begin the interrogation?</p>
+
+    <audio class="bg-music" src="sounds/music.mp3" controls autoplay loop></audio>
+
+    <!-- <div class="game-buttons">
+        <div class="button">1</div>
+        <div class="button">1</div>
+        <div class="button">1</div>
+        <div class="button">1</div>
+    </div> -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="button">1</div>
+            </div>
+            <div class="col">
+                <div class="button">1</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="button">1</div>
+            </div>
+            <div class="col">
+                <div class="button">1</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="index.js"></script>
