@@ -28,10 +28,19 @@ body {
 }
 
 .button {
-    margin: auto;
     background: white;
     color: black;
     padding: 3%;
+}
+
+.btn {
+    /* To make the button as wide as Bootstrap's .col elements */
+    width: 100%;
+}
+
+.modal-content {
+    text-align: left;
+    background: #1f1f1f;
 }
 
 .col {
