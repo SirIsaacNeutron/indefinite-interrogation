@@ -31,12 +31,9 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <h1 className="game-header">Indefinite</h1>
-        <p className="menu-question">Ready to begin the interrogation?</p>
+        <MainMenu />
 
         <audio className="bg-music" src={backgroundMusicFile} controls autoPlay loop></audio>
-
-        <MainMenu />
       </>);
   }
 }
