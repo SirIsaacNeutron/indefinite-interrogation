@@ -19,6 +19,9 @@ body {
   background: white;
   color: black;
   padding: 3%;
+
+   /* Make buttons in the same row of the same height as their .cols. Helps on mobile devices */
+  height: 100%;
 }
 
 .btn {
