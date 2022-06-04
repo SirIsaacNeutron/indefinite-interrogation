@@ -2,6 +2,10 @@ import React from 'react';
 
 function MainMenu({ setGameStarted }) {
 
+    function handleClick() {
+        setGameStarted(prevGameStarted => !prevGameStarted);
+    }
+
     return (
         <>
             <h1 className="game-header">Indefinite</h1>
@@ -11,7 +15,7 @@ function MainMenu({ setGameStarted }) {
                 <div className="row row-eq-height">
                     <div className="col">
                         <div className="btn button" 
-                        onClick={() => setGameStarted(true)}>Yes. Let's start. (Play)</div>
+                        onClick={handleClick}>Yes. Let's start. (Play)</div>
                     </div>
                     <div className="col">
                         <button className="btn button" data-bs-toggle="modal" data-bs-target="#helpWindow">Where
