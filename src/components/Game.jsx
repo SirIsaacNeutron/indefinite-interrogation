@@ -1,17 +1,59 @@
 import React, { useState } from 'react';
 
+function randomArrayElement(array) {
+    const randIndex = Math.floor(Math.random() * array.length);
+    return array[randIndex];
+}
+
+// Returns an array of length n, with no duplicates, from 
+// random elements in array
+function getNRandomAnswers(array, n, correctAnswer = null) {
+    let answerSet = new Set();
+    while (answerSet.size < n) {
+        const randomAnswer = randomArrayElement(array);
+        if (randomAnswer !== correctAnswer) {
+            answerSet.add(randomAnswer);
+        }
+    }
+
+    return Array.from(answerSet);
+}
+
+// Durstenfeld shuffle; see https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 class Question {
     constructor(questionText, possibleAnswers) {
         this.questionText = questionText;
         this.possibleAnswers = possibleAnswers;
 
+        this.hasCorrectAnswer = false;
+        this.correctAnswer = null;
+
         // possibleAnswers is all the possible answer choices that can be used to
         // build displayedAnswers. displayedAnswers is exactly 4 answers, with only
         // 1 being the correct one
-        this.displayedAnswers = [];
+        this.createDisplayedAnswers();
+    }
 
-        this.hasCorrectAnswer = false;
-        this.correctAnswer = null;
+    createDisplayedAnswers() {
+        if (this.correctAnswer !== null) {
+            const wrongAnswers = getNRandomAnswers(this.possibleAnswers, 
+                3, this.correctAnswer);
+            this.displayedAnswers = [this.correctAnswer, ...wrongAnswers];
+            shuffleArray(this.displayedAnswers);
+        }
+        else {
+            const randomAnswers = getNRandomAnswers(this.possibleAnswers, 4);
+            this.displayedAnswers = [...randomAnswers];
+            // No shuffling needed as the answers are chosen randomly; we only
+            // need to shuffle to make sure the correct answer isn't always displayed
+            // in the same place
+        }
     }
 
     setCorrectAnswer(answer) {
@@ -84,7 +126,60 @@ const questions = [
 ]
 
 function Game(props) {
+    let [isGameOver, setGameOver] = useState(false);
 
+    let [question, setQuestion] = useState(questions[0]);
+
+    console.log(question);
+
+    const answers = [...question.displayedAnswers];
+
+    function handleClick(answerIndex) {
+        // console.log('Test: ' + answerIndex);
+        const chosenAnswer = answers[answerIndex];
+
+        if (!question.hasCorrectAnswer) {
+            // console.log('Correct answer set to ' + chosenAnswer);
+            question.setCorrectAnswer(chosenAnswer)
+            setQuestion(randomArrayElement(questions));
+        }
+        else if (chosenAnswer === question.correctAnswer) {
+            // console.log('Correct! Next question')
+            setQuestion(randomArrayElement(questions));
+        }
+        else {
+            console.log('Wrong! The correct answer is ' + question.correctAnswer);
+        }
+    }
+    
+    return (
+        <>
+            <p className="game-question">{question.questionText}</p>
+
+            <div className="container">
+                <div className="row row-eq-height">
+                    <div className="col">
+                        <button className="btn button"
+                        onClick={() => handleClick(0)}>{answers[0]}</button>
+                    </div>
+                    <div className="col">
+                        <button className="btn button"
+                        onClick={() => handleClick(1)}>{answers[1]}</button>
+                    </div>
+                </div>
+                <div className="row row-eq-height">
+                    <div className="col">
+                        <button className="btn button"
+                        onClick={() => handleClick(2)}>{answers[2]}</button>
+                    </div>
+                    <div className="col">
+                        <button className="btn button"
+                        onClick={() => handleClick(3)}>{answers[3]}</button>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default Game;

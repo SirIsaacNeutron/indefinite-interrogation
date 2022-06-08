@@ -8,11 +8,16 @@ body {
 .game-header {
   margin-top: 5%;
   font-size: 4rem;
+  margin-bottom: 4%;
 }
 
 .menu-question {
-  margin-top: 4%;
   font-size: 2rem;
+}
+
+.game-question {
+  font-size: 2rem;
+  margin-top: 4%;
 }
 
 .button {
