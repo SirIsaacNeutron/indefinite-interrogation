@@ -60,6 +60,12 @@ class Question {
         this.correctAnswer = answer;
         this.hasCorrectAnswer = true;
     }
+
+    reset() {
+        this.correctAnswer = null;
+        this.hasCorrectAnswer = false;
+        this.createDisplayedAnswers();
+    }
 }
 
 const possibleNames = ['Danny James', 'Megan Jenkins', 
@@ -183,9 +189,19 @@ const questions = [
     new Question('You recently received a coded message. What did it say?', possibleCodes)
 ]
 
-function Game(props) {
-    let [isGameOver, setGameOver] = useState(false);
+const wrongAnswerReplies = ['You slipped up!', 'Liar! You contradicted yourself.', 
+"Your responses don't match.", 'Liar!'
+]
 
+const correctAnswerVariations = ["Here's your previous answer: ", 'This was what you said before: ',
+'Earlier you said: '
+]
+
+function getWrongAnswerReply() {
+    return randomArrayElement(wrongAnswerReplies) + ' ' + randomArrayElement(correctAnswerVariations);
+}
+
+function Game(props) {
     let [question, setQuestion] = useState(questions[0]);
 
     console.log(question);
@@ -193,12 +209,17 @@ function Game(props) {
     const answers = [...question.displayedAnswers];
 
     function handleClick(answerIndex) {
+        // Prevents users from continuing to further questions after wrong answers
+        if (props.isGameOver) { return; }
+
         // console.log('Test: ' + answerIndex);
         const chosenAnswer = answers[answerIndex];
 
         if (!question.hasCorrectAnswer) {
             // console.log('Correct answer set to ' + chosenAnswer);
             question.setCorrectAnswer(chosenAnswer)
+            // Make sure the answers aren't displayed the same way next time
+            question.createDisplayedAnswers();
             setQuestion(randomArrayElement(questions));
         }
         else if (chosenAnswer === question.correctAnswer) {
@@ -206,13 +227,29 @@ function Game(props) {
             setQuestion(randomArrayElement(questions));
         }
         else {
-            console.log('Wrong! The correct answer is ' + question.correctAnswer);
+            // console.log('Wrong! The correct answer is ' + question.correctAnswer);
+            props.setGameOver(true);
+            
+            setQuestion(questions[0]);
+            setTimeout(() => {
+                // This forEach is required to reset the Question answers;
+                // otherwise they'll keep the correctAnswer from the previous session!
+                questions.forEach(q => {
+                    q.reset();
+                })
+    
+                props.setGameOver(false);
+
+                // Return to Main Menu
+                props.setGameStarted(false);
+            }, 3000)
         }
     }
     
     return (
         <>
-            <p className="game-question">{question.questionText}</p>
+            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply()} ${question.correctAnswer}`
+            : question.questionText}</p>
 
             <div className="container">
                 <div className="row row-eq-height">
