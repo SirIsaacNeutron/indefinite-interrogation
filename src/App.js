@@ -10,12 +10,13 @@ import './App.css';
 function App() {
   let [gameStarted, setGameStarted] = useState(false);
   let [isGameOver, setGameOver] = useState(false);
+  let [score, setScore] = useState(0);
   
   return (
     <>
       { gameStarted ? 
       <Game setGameStarted={setGameStarted} isGameOver={isGameOver} 
-      setGameOver={setGameOver} /> :
+      setGameOver={setGameOver} score={score} setScore={setScore} /> :
       <MainMenu setGameStarted={setGameStarted}/>}
       
       <audio className="bg-music" src={backgroundMusicFile} controls autoPlay loop></audio>

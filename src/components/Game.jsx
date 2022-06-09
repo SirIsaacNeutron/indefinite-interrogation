@@ -221,10 +221,12 @@ function Game(props) {
             // Make sure the answers aren't displayed the same way next time
             question.createDisplayedAnswers();
             setQuestion(randomArrayElement(questions));
+            props.setScore(props.score + 1);
         }
         else if (chosenAnswer === question.correctAnswer) {
             // console.log('Correct! Next question')
             setQuestion(randomArrayElement(questions));
+            props.setScore(props.score + 1);
         }
         else {
             // console.log('Wrong! The correct answer is ' + question.correctAnswer);
@@ -241,6 +243,8 @@ function Game(props) {
 
                 props.setGameOver(false);
 
+                props.setScore(0);
+
                 // Return to Main Menu
                 props.setGameStarted(false);
             }, 3000)
@@ -249,6 +253,7 @@ function Game(props) {
     
     return (
         <>
+            <p>{props.score}</p>
             <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply()} ${question.correctAnswer}`
             : question.questionText}</p>
 
