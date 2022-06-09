@@ -63,46 +63,86 @@ class Question {
 }
 
 const possibleNames = ['Danny James', 'Megan Jenkins', 
-'Alexander Patel', 'Kwabena Ihejirika'];
+'Alexander Patel', 'Kwabena Ihejirika', 'Mei Ueda', 'Nishant Chowdhury',
+'Yejide Afolayan', 'Tina Powell', 'Hong Wu', 'Kevin Campbell', 'Ai Chen', 
+'Seok Yi', 'Robert Dixon', 'Jack Marshall'];
 
 const possibleLocations = ['China', 'Canada', 
-'The Philippines', 'India', 'Indonesia', 'Mexico', 'Russia'];
+'The Philippines', 'India', 'Indonesia', 'Mexico', 'Russia', 'Brazil', 
+'The United States', 'The United Kingdom', 'Japan', 'Italy', 'Germany'];
 
-const possibleAges = ['51', '35', '32', '19', '43', '31', '38', 
-'24', '45', '16', '49', '27', '42', '30', '52'];
+const possibleAges = ['51', '35', '33', '32', '37', '19', '43', '31', '38', 
+'24', '45', '46', '16', '49', '27', '42', '30', '52', '21'];
 
 const possibleActivities = ['Visiting a friend', 'Drinking', 'Skydiving', 'Working',
-'Playing video games', 'Getting married', 'Hiking'];
+'Playing video games', 'Getting married', 'Hiking', 'Selling drugs', 'Cooking drugs',
+'Enjoying nature', 'Using the bathroom', 'Ice skating'];
 
-const possibleNumKilled = ['0', '1', '2', '5-10'];
+const possibleNumKilled = ['0', '1', '2', '3', '4', '5-10'];
 
 const possibleRelations = ['My grandfather', 'My brother', 
 'My uncle', 'My mother', 'My sister', 'My grandmother', 'My father', 'My aunt']
 
 const possibleOccupations = ['Exobiologist', 'Computer Hardware Engineer', 
 'Nuclear Engineer', 'Linguist', 'Software Engineer', 'Actor', 'Chemist', 
-'Aerospace Engineer'];
+'Aerospace Engineer', 'Floral Designer', 'Architect', 'Writer', 'Civil Engineer'];
 
-const possibleBuddhismReasons = ['For political reasons', 'For a friend', 
-'For a loved one', 'Just for fun', "I don't know"];
+const possibleReasons = ['For political reasons', 'For a loved one', 
+'Just for fun', 'For a friend', 'For protection', 'Out of necessity', 
+'For the children'];
+
+const possibleBuddhismReasons = [...possibleReasons, "I don't know"];
 
 const possibleValuablesLocations = ['Under the kitchen sink', 'Behind my bookshelf',
-'Under the floorboards', 'In the basement'];
+'Under the floorboards', 'In the basement', 'The bathroom cabinet', 'Under my bed',
+'My bedroom closet'];
 
-const possibleComputerTimes = ['10:45 AM', '1:45 PM', '7:30 AM', '4:00 PM'];
+const possibleComputerTimes = ['10:45 AM', '1:45 PM', '7:30 AM', '4:00 PM', 'Midnight',
+'8:00 AM', '6:00 PM', '9:06 AM', '5:40 PM', 'Noon'];
 
-const possibleDrugReasons = ['For a loved one', 'For a friend', 'For protection',
-'It clears a guilty heart'];
+const possibleDrugReasons = [...possibleReasons, 'It clears a guilty heart'];
 
 const possibleReligions = ['Christianity', 'None', 'Hinduism', 'Judaism', 'Islam'];
 
 const possibleSisterLocations = [...possibleLocations, "I don't know"];
 
 const possibleSisterLunchTimes = ['1PM - 2PM', '10PM - 4AM', '6AM - 9PM', '5AM - 12AM',
-'2PM - 3PM', '2AM - 3AM', '1AM - 2AM'];
+'2PM - 3PM', '2AM - 3AM', '3AM - 4AM', '1AM - 2AM', '7AM - 3PM', '8AM - 6PM', '11AM - 12PM'];
 
 const possibleSisterLastSeenTimes = ['2 days ago', '10 years ago', 'Before The Incident',
-'Last month'];
+'Last month', '8 years ago', '9 years ago', 'Last year', 'Last week', '11 years ago', '7 years ago', 
+'6 years ago', 'Yesterday', 'A few hours ago'];
+
+const possibleTalkTimes = ['Never', 'Tomorrow', 'In a few days', 'In a few weeks',
+'Next week', 'In about a year', 'In several months'];
+
+const possibleMemorySounds = ["I don't remember", 'There are four facets of mind',
+'We brought you here for a reason', 'When did you exist?'];
+
+const possibleDestinations = ['Neptune', 'The Asteroid Belt', 'Jupiter', 'Saturn', 
+'The Moon colony', 'Mars'];
+
+const possibleWeapons = ['Clubs', 'Submachine guns', 'Pistols', 'Antimatter mints',
+'Swords', 'Javelins'];
+
+const possibleRestaurants = ['The White Rug', 'Trounce Steaks', 'The Dancing Crow', 
+'The Eating Hole', 'The Blue Daisy', "Supreme Overlord's Noodles", 'Stellar Seafood'];
+
+const possibleStrange = ['A hooded figure', 'A glowing skyward object', 
+'A one-eyed man', 'A white motor vehicle'];
+
+const possibleTerroristLeaders = ['Lady Dukkha', 'Dr. Smith', "I'm not a terrorist",
+"I don't know", '...What?'];
+
+const possibleDepartureHelpers = [...possibleRelations, 'No one!'];
+
+const possibleDrugSellers = [...possibleRelations, 'A stranger'];
+
+const possibleCriticismReasons = ['She was angry', 'That question is unfair',
+"I don't remember", 'She felt it was important', 'For school'];
+
+const possibleCodes = ['Sbyybj @OenaqYvory', 'Va gur qlfgbcvn2a shgher',
+'Guvf zft vf abg 1frpher', 'Vaqrsvavgr frdhry'];
 
 const questions = [
     new Question('What is your full name?', possibleNames),
@@ -122,7 +162,25 @@ const questions = [
     new Question('Which religion do you identify with?', possibleReligions),
     new Question('What are the whereabouts of your sister?', possibleSisterLocations),
     new Question('When does your sister usually go out for lunch?', possibleSisterLunchTimes),
-    new Question('When did you last see your sister in person?', possibleSisterLastSeenTimes)
+    new Question('When did you last see your sister in person?', possibleSisterLastSeenTimes),
+    new Question('When did your sister run away from home?', possibleSisterLastSeenTimes),
+    new Question('When do you usally go out for lunch?', possibleSisterLunchTimes),
+    new Question('When did you search "overthrow government" yesterday?', possibleComputerTimes),
+    new Question('When were you planning to talk to us about your sister?', possibleTalkTimes),
+    new Question('What did you hear, just as you lost your memory?', possibleMemorySounds),
+    new Question('Where were you planning to go after leaving Earth?', possibleDestinations),
+    new Question('What kinds of weapons have you been buying?', possibleWeapons),
+    new Question('In which restaurant do you have your lunch meetings?', possibleRestaurants),
+    new Question('What period of The Incident do you have no memory of?', possibleSisterLunchTimes),
+    new Question('What seemed strange to you the day before The Incident?', possibleStrange),
+    new Question('Who is the leader of your terrorist cell?', possibleTerroristLeaders),
+    new Question('Before we got you, when were you planning to leave Earth?', possibleTalkTimes),
+    new Question('Who helped arrange your departure from Earth?', possibleDepartureHelpers),
+    new Question('Who sold you illegal drugs like SpyteFire?', possibleDrugSellers),
+    new Question("Who is your sister's significant other?", possibleNames),
+    new Question('Why were you planning to leave Earth?', possibleReasons),
+    new Question('Years ago, your sister criticized the government. Why?', possibleCriticismReasons),
+    new Question('You recently received a coded message. What did it say?', possibleCodes)
 ]
 
 function Game(props) {
