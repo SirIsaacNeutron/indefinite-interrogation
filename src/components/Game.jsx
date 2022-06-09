@@ -230,7 +230,6 @@ function Game(props) {
             // console.log('Wrong! The correct answer is ' + question.correctAnswer);
             props.setGameOver(true);
             
-            setQuestion(questions[0]);
             setTimeout(() => {
                 // This forEach is required to reset the Question answers;
                 // otherwise they'll keep the correctAnswer from the previous session!
@@ -238,6 +237,8 @@ function Game(props) {
                     q.reset();
                 })
     
+                setQuestion(questions[0]);
+
                 props.setGameOver(false);
 
                 // Return to Main Menu
