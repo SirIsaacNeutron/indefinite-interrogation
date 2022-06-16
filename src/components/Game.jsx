@@ -197,6 +197,8 @@ const correctAnswerVariations = ["Here's your previous answer: ", 'This was what
 'Earlier you said: '
 ]
 
+const questionIntroVariations = ['I see.', 'Interesting.']
+
 function getWrongAnswerReply() {
     return randomArrayElement(wrongAnswerReplies) + ' ' + randomArrayElement(correctAnswerVariations);
 }
@@ -250,12 +252,28 @@ function Game(props) {
             }, 3000)
         }
     }
+
+    function getQuestionText() {
+        let displayedText = ''
+        const randomNum = Math.random() * 100
+    
+        // 0-9 is ten numbers, so this should have a 10% chance of being called
+        // props.score can't be 0; otherwise this might get called for the very first question!
+        // That wouldn't match the original game's behavior... 
+        if (randomNum < 10 && props.score !== 0) {
+            displayedText = randomArrayElement(questionIntroVariations) + ` ${question.questionText}`
+        }
+        else {
+            displayedText = question.questionText
+        }
+        return displayedText
+    }
     
     return (
         <>
             <p>{props.score}</p>
             <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply()} ${question.correctAnswer}`
-            : question.questionText}</p>
+            : getQuestionText()}</p>
 
             <div className="container">
                 <div className="row row-eq-height">
