@@ -1,9 +1,17 @@
-import React from 'react';
+import React from 'react'
+
+import buttonSound from '../sounds/button_press.mp3'
 
 function MainMenu({ setGameStarted }) {
 
     function handleClick() {
-        setGameStarted(prevGameStarted => !prevGameStarted);
+        const buttonAudio = new Audio(buttonSound)
+        buttonAudio.play()
+    }
+
+    function startGameButton() {
+        handleClick()
+        setGameStarted(prevGameStarted => !prevGameStarted)
     }
 
     return (
@@ -15,19 +23,23 @@ function MainMenu({ setGameStarted }) {
                 <div className="row row-eq-height">
                     <div className="col">
                         <div className="btn button" 
-                        onClick={handleClick}>Yes. Let's start. (Play)</div>
+                        onClick={startGameButton}>Yes. Let's start. (Play)</div>
                     </div>
                     <div className="col">
-                        <button className="btn button" data-bs-toggle="modal" data-bs-target="#helpWindow">Where
+                        <button className="btn button" data-bs-toggle="modal" 
+                        data-bs-target="#helpWindow"
+                        onClick={handleClick}>Where
                             am I? (Help)</button>
                     </div>
                 </div>
                 <div className="row row-eq-height">
                     <div className="col">
-                        <a className="btn button code-link" href="https://github.com/SirIsaacNeutron/indefinite-interrogation" target="_blank" rel="noreferrer">What are you? (Source Code)</a>
+                        <a className="btn button code-link" href="https://github.com/SirIsaacNeutron/indefinite-interrogation" 
+                        target="_blank" rel="noreferrer" onClick={handleClick}>What are you? (Source Code)</a>
                     </div>
                     <div className="col">
-                        <div className="btn button" data-bs-toggle="modal" data-bs-target="#musicHelpWindow">What's below the buttons?</div>
+                        <div className="btn button" data-bs-toggle="modal" data-bs-target="#musicHelpWindow"
+                        onClick={handleClick}>What's below the buttons?</div>
                     </div>
                 </div>
             </div>

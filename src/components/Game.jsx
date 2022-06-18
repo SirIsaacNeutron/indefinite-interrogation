@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+
+import buttonPress from '../sounds/button_press.mp3'
+import buttonWrong from '../sounds/wrong_answer.mp3'
 
 function randomArrayElement(array) {
     const randIndex = Math.floor(Math.random() * array.length);
@@ -215,23 +218,29 @@ function Game(props) {
         if (props.isGameOver) { return; }
 
         // console.log('Test: ' + answerIndex);
-        const chosenAnswer = answers[answerIndex];
+        const chosenAnswer = answers[answerIndex]
 
         if (!question.hasCorrectAnswer) {
-            // console.log('Correct answer set to ' + chosenAnswer);
+            const buttonSound = new Audio(buttonPress)
+            buttonSound.play()
             question.setCorrectAnswer(chosenAnswer)
+
             // Make sure the answers aren't displayed the same way next time
-            question.createDisplayedAnswers();
-            setQuestion(randomArrayElement(questions));
-            props.setScore(props.score + 1);
+            question.createDisplayedAnswers()
+            setQuestion(randomArrayElement(questions))
+            props.setScore(props.score + 1)
         }
         else if (chosenAnswer === question.correctAnswer) {
-            // console.log('Correct! Next question')
-            setQuestion(randomArrayElement(questions));
-            props.setScore(props.score + 1);
+            const buttonSound = new Audio(buttonPress)
+            buttonSound.play()
+
+            setQuestion(randomArrayElement(questions))
+            props.setScore(props.score + 1)
         }
         else {
-            // console.log('Wrong! The correct answer is ' + question.correctAnswer);
+            const wrongAnswerSound = new Audio(buttonWrong)
+            wrongAnswerSound.play()
+
             props.setGameOver(true);
             
             setTimeout(() => {
