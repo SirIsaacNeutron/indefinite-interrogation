@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import buttonPress from '../sounds/button_press.mp3'
 import buttonWrong from '../sounds/wrong_answer.mp3'
@@ -252,52 +252,47 @@ function getNextQuestionList(questionsIndices) {
             nextList.push(nextQuestion)
         }
     }
+
+    return nextList
 }
 
+let questionList = getInitialQuestionList([0])
+let currentListIndex = 0
+let questionsIndices = [0]
+
 function Game(props) {
-    const [questionsIndices, setQuestionsIndices] = useState([0])
-    const [questionList, setQuestionList] = useState(getInitialQuestionList(questionsIndices))
-    const [currentListIndex, setCurrentListIndex] = useState(0)
     const [question, setQuestion] = useState(questionList[currentListIndex])
 
-    useEffect(() => {
-        console.log('useEffect currentListIndex = ', currentListIndex)
-        setQuestion(questionList[currentListIndex])
-        console.log('displayedQuestion = ', questionList[currentListIndex])
-        console.log('question = ', question)
-    }, [questionList, currentListIndex])
-
     const answers = [...question.displayedAnswers]
+    console.log(question)
 
     function getNextQuestion() {
-        setCurrentListIndex(index => index + 1)
-        if (currentListIndex >= questionList.length) {
+        //setCurrentListIndex(currentListIndex + 1)
+        const nextListIndex = currentListIndex + 1
+        if (nextListIndex >= questionList.length) {
             const nextQuestionsIndex = questionsIndices[questionsIndices.length - 1] + 1
             // [0], [0, 1], [0, 1, 2], ... until there are no more indices to add
             if (nextQuestionsIndex < questions.length) {
-                const newIndices = [...questionsIndices, nextQuestionsIndex]
-                setQuestionsIndices(newIndices)
+                questionsIndices = [...questionsIndices, nextQuestionsIndex]
             }
-            console.log("nextQuestionsIndex = ", nextQuestionsIndex);
-            console.log("new questionsIndices = ", questionsIndices);
 
             const nextList = getNextQuestionList(questionsIndices)
             
-            setCurrentListIndex(0)
-            console.log('after set index currentListIndex = ', currentListIndex)
-            setQuestionList(nextList)
+            currentListIndex = 0
+            questionList = nextList
+
+            return questionList[currentListIndex]
         }
 
-        console.log('currentListIndex = ', currentListIndex)
+        currentListIndex = nextListIndex
         const currentQuestion = questionList[currentListIndex]
-        return currentQuestion;
+        return currentQuestion
     }
 
     function handleClick(answerIndex) {
         // Prevents users from continuing to further questions after wrong answers
         if (props.isGameOver) { return; }
 
-        // console.log('Test: ' + answerIndex);
         const chosenAnswer = answers[answerIndex]
 
         if (!question.hasCorrectAnswer) {
@@ -307,8 +302,6 @@ function Game(props) {
 
             // Make sure the answers aren't displayed the same way next time
             question.createDisplayedAnswers()
-
-            //setCurrentListIndex(currentListIndex + 1)
 
             const nextQuestion = getNextQuestion()
             setQuestion(nextQuestion)
@@ -320,8 +313,6 @@ function Game(props) {
             buttonSound.play()
 
             question.createDisplayedAnswers()
-
-            //setCurrentListIndex(currentListIndex + 1)
 
             const nextQuestion = getNextQuestion()
             setQuestion(nextQuestion)
@@ -342,9 +333,9 @@ function Game(props) {
                     })
                 })
 
-                setQuestionsIndices([0])
-                setCurrentListIndex(0)
-                setQuestionList(getInitialQuestionList(questionsIndices))
+                questionsIndices = [0]
+                currentListIndex = 0
+                questionList = getInitialQuestionList(questionsIndices)
     
                 setQuestion(questions[0][0])
 
