@@ -85,4 +85,4 @@ function MainMenu({ setGameStarted }) {
     );
 }
 
-export default MainMenu;
+export default MainMenu

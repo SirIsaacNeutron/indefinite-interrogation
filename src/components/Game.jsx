@@ -30,7 +30,7 @@ function shuffleArray(array) {
     }
 }
 class Question {
-    constructor(questionText, possibleAnswers) {
+    constructor(questionText, possibleAnswers, key = null) {
         this.questionText = questionText
         this.possibleAnswers = possibleAnswers
 
@@ -41,6 +41,8 @@ class Question {
         // build displayedAnswers. displayedAnswers is exactly 4 answers, with only
         // 1 being the correct one
         this.createDisplayedAnswers()
+
+        this.key = key
     }
 
     createDisplayedAnswers() {
@@ -153,27 +155,52 @@ const possibleCriticismReasons = ['She was angry', 'That question is unfair',
 const possibleCodes = ['Sbyybj @OenaqYvory', 'Va gur qlfgbcvn2a shgher',
 'Guvf zft vf abg 1frpher', 'Vaqrsvavgr frdhry']
 
+// These dictionaries show which questions affect the post-game Report
+const youQuestions = {
+    'name': 'What is your full name?',
+    'how old': 'How old are you?',
+    'where born': 'Where were you born?',
+    'your location': 'Where were you during The Incident?',
+    'what doing': 'What were you doing the day of The Incident?',
+    'closest to': 'Who are you closest to?',
+    'your occupation': 'What is your occupation?',
+    'religion': 'Which religion do you identify with?',
+    'how many killed': 'How many did you kill during The Incident?',
+}
+
+const sisQuestions = {
+    'sis how old': 'How old is your sister?',
+    'sis why buddhism': 'Your sister converted to Buddhism. Why?',
+    'sis occupation': "What was your sister's occupation?",
+    'sis whereabouts': 'What are the whereabouts of your sister?',
+    'sis lunch when': 'When does your sister usually go out for lunch?',
+    'sis last seen': 'When did you last see your sister in person?',
+    'sis ran away': 'When did your sister run away from home?',
+    'sis talk to us when': 'When were you planning to talk to us about your sister?',
+    'sis sig other': "Who is your sister's significant other?",
+}
+
 const list1 = [
-    new Question('What is your full name?', possibleNames),
-    new Question('How old are you?', possibleAges),
-    new Question('Where were you born?', possibleLocations),
-    new Question('Where were you during The Incident?', possibleLocations),
-    new Question('What were you doing the day of The Incident?', possibleActivities),
-    new Question('Who are you closest to?', possibleRelations),
-    new Question('What is your occupation?', possibleOccupations),
+    new Question(youQuestions['name'], possibleNames, 'name'),
+    new Question(youQuestions['how old'], possibleAges, 'how old'),
+    new Question(youQuestions['where born'], possibleLocations, 'where born'),
+    new Question(youQuestions['your location'], possibleLocations, 'your location'),
+    new Question(youQuestions['what doing'], possibleActivities, 'what doing'),
+    new Question(youQuestions['closest to'], possibleRelations, 'closest to'),
+    new Question(youQuestions['your occupation'], possibleOccupations, 'your occupation'),
     new Question('Where in your home do you keep your valuables?', possibleValuablesLocations),
-    new Question('Which religion do you identify with?', possibleReligions)
+    new Question(youQuestions['religion'], possibleReligions, 'religion')
 ]
 
 const list2 = [
-    new Question('How old is your sister?', possibleAges),
-    new Question('Your sister converted to Buddhism. Why?', possibleBuddhismReasons),
-    new Question("What was your sister's occupation?", possibleOccupations),
-    new Question('What are the whereabouts of your sister?', possibleSisterLocations),
-    new Question('When does your sister usually go out for lunch?', possibleSisterLunchTimes),
-    new Question('When did you last see your sister in person?', possibleSisterLastSeenTimes),
-    new Question('When did your sister run away from home?', possibleSisterLastSeenTimes),
-    new Question('When were you planning to talk to us about your sister?', possibleTalkTimes),
+    new Question(sisQuestions['sis how old'], possibleAges, 'sis how old'),
+    new Question(sisQuestions['sis why buddhism'], possibleBuddhismReasons, 'sis why buddhism'),
+    new Question(sisQuestions['sis occupation'], possibleOccupations, 'sis occupation'),
+    new Question(sisQuestions['sis whereabouts'], possibleSisterLocations, 'sis whereabouts'),
+    new Question(sisQuestions['sis lunch when'], possibleSisterLunchTimes, 'sis lunch when'),
+    new Question(sisQuestions['sis last seen'], possibleSisterLastSeenTimes, 'sis last seen'),
+    new Question(sisQuestions['sis ran away'], possibleSisterLastSeenTimes, 'sis ran away'),
+    new Question(sisQuestions['sis talk to us when'], possibleTalkTimes, 'sis talk to us when'),
     new Question('Why have you been buying illegal drugs like SpyteFire?', possibleDrugReasons),
     new Question('Who sold you illegal drugs like SpyteFire?', possibleDrugSellers),
     new Question('When did you last log into a computer console?', possibleComputerTimes),
@@ -307,6 +334,16 @@ function Game(props) {
             setQuestion(nextQuestion)
 
             props.setScore(props.score + 1)
+
+            if (question.key !== null) {
+                props.setAnsweredQuestions(aq => {
+                    // This copying code is needed for the correctAnswer and other attributes
+                    // to be preserved
+                    const newQuestion = new Question(question.questionText, question.possibleAnswers, question.key)
+                    newQuestion.correctAnswer = question.correctAnswer
+                    return [...aq, newQuestion]
+                })
+            }
         }
         else if (chosenAnswer === question.correctAnswer) {
             const buttonSound = new Audio(buttonPress)
@@ -341,7 +378,7 @@ function Game(props) {
 
                 props.setGameOver(false)
 
-                props.setScore(0)
+                props.setShowReport(true)
 
                 // Return to Main Menu
                 props.setGameStarted(false)
