@@ -78,6 +78,22 @@ const possibleNames = ['Danny James', 'Megan Jenkins',
 'Yejide Afolayan', 'Tina Powell', 'Hong Wu', 'Kevin Campbell', 'Ai Chen', 
 'Seok Yi', 'Robert Dixon', 'Jack Marshall']
 
+// These functions help build the report
+export function getGenderPronoun(name) {
+    if (name.startsWith('Megan') || name.startsWith('Mei') || name.startsWith('Yejide')
+    || name.startsWith('Tina') || name.startsWith('Ai')) {
+        return 'she'
+    }
+    return 'he'
+}
+
+export function getGenderPossessivePronoun(name) {
+    if (getGenderPronoun(name) === 'she') {
+        return 'her'
+    }
+    return 'his'
+}
+
 const possibleLocations = ['China', 'Canada', 
 'The Philippines', 'India', 'Indonesia', 'Mexico', 'Russia', 'Brazil', 
 'The United States', 'The United Kingdom', 'Japan', 'Italy', 'Germany']
@@ -176,7 +192,6 @@ const sisQuestions = {
     'sis lunch when': 'When does your sister usually go out for lunch?',
     'sis last seen': 'When did you last see your sister in person?',
     'sis ran away': 'When did your sister run away from home?',
-    'sis talk to us when': 'When were you planning to talk to us about your sister?',
     'sis sig other': "Who is your sister's significant other?",
 }
 
@@ -200,7 +215,7 @@ const list2 = [
     new Question(sisQuestions['sis lunch when'], possibleSisterLunchTimes, 'sis lunch when'),
     new Question(sisQuestions['sis last seen'], possibleSisterLastSeenTimes, 'sis last seen'),
     new Question(sisQuestions['sis ran away'], possibleSisterLastSeenTimes, 'sis ran away'),
-    new Question(sisQuestions['sis talk to us when'], possibleTalkTimes, 'sis talk to us when'),
+    new Question('When were you planning to talk to us about your sister?', possibleTalkTimes),
     new Question('Why have you been buying illegal drugs like SpyteFire?', possibleDrugReasons),
     new Question('Who sold you illegal drugs like SpyteFire?', possibleDrugSellers),
     new Question('When did you last log into a computer console?', possibleComputerTimes),
