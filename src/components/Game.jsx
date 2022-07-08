@@ -105,7 +105,7 @@ const possibleActivities = ['Visiting a friend', 'Drinking', 'Skydiving', 'Worki
 'Playing video games', 'Getting married', 'Hiking', 'Selling drugs', 'Cooking drugs',
 'Enjoying nature', 'Using the bathroom', 'Ice skating']
 
-const possibleNumKilled = ['0', '1', '2', '3', '4', '5-10']
+const possibleNumKilled = ['0', '1', '2', '3', '4', '5-10', '11+']
 
 const possibleRelations = ['My grandfather', 'My brother', 
 'My uncle', 'My mother', 'My sister', 'My grandmother', 'My father', 'My aunt']
@@ -220,11 +220,11 @@ const list2 = [
     new Question('Who sold you illegal drugs like SpyteFire?', possibleDrugSellers),
     new Question('When did you last log into a computer console?', possibleComputerTimes),
     new Question('When do you usally go out for lunch?', possibleSisterLunchTimes),
-    new Question('How many did you kill during The Incident?', possibleNumKilled),
+    new Question(youQuestions['how many killed'], possibleNumKilled, 'how many killed'),
 ]
 
 const list3 = [
-    new Question("Who is your sister's significant other?", possibleNames),
+    new Question(sisQuestions['sis sig other'], possibleNames, 'sis sig other'),
     new Question('Years ago, your sister criticized the government. Why?', possibleCriticismReasons),
     new Question('What did you hear, just as you lost your memory?', possibleMemorySounds),
     new Question('Where were you planning to go after leaving Earth?', possibleDestinations),

@@ -177,6 +177,18 @@ function Report(props) {
 
         }
 
+        let additionalInfoText = ''
+        if (reportObject['how many killed']) {
+            const killed = reportObject['how many killed'].correctAnswer
+            const name = reportObject['name'].correctAnswer
+            if (killed === '0') {
+                additionalInfoText += name + ' claims she did not kill anyone. '
+            }
+            else {
+                additionalInfoText += name + ' admitted to killing ' + killed + ' people. '
+            }
+        }
+
         let endText = ''
         if (sisterReportLength > 0) {
             const name = reportObject['name'].correctAnswer
@@ -191,7 +203,7 @@ function Report(props) {
 
         const punishment = 'Punishment: Indefinite detention.'
 
-        return [reportText, sisterText, endText, punishment]
+        return [reportText, sisterText, additionalInfoText, endText, punishment]
     }
 
     function handleClick() {
@@ -203,7 +215,7 @@ function Report(props) {
         props.setScore(0)
     }
 
-    const [reportText, sisterText, endText, punishment] = getReport()
+    const [reportText, sisterText, additionalInfoText, endText, punishment] = getReport()
 
     return (
         <>
@@ -214,6 +226,7 @@ function Report(props) {
             <div style={{'textAlign': 'left', 'paddingLeft': '5%'}}>
                 <p>{reportText}</p>
                 <p>{sisterText}</p>
+                <p>{additionalInfoText}</p>
                 <p>{endText}</p>
                 <p>{punishment}</p>
             </div>
