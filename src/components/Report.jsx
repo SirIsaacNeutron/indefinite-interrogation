@@ -77,7 +77,7 @@ function Report(props) {
                 reportText += capitalizeFirstLetter(genderPronoun) + ' admits following Buddhism, a dangerous Heathen belief. '
             }
             else if (religion === 'None') {
-                reportText += capitalizeFirstLetter(genderPronoun) + ' says he follows no religion, which is suspicious and unlikely. '
+                reportText += capitalizeFirstLetter(genderPronoun) + ' says ' + genderPronoun + ' follows no religion, which is suspicious and unlikely. '
             }
             else {
                 reportText += capitalizeFirstLetter(genderPronoun) + ' follows ' + religion + ', an approved religious belief. ' 
@@ -85,9 +85,9 @@ function Report(props) {
         }
 
         if (reportObject['your location']) {
-            reportText += 'During the Incident, ' + reportObject['name'].correctAnswer + ' was in ' + reportObject['your location'].correctAnswer + ' '
+            reportText += 'During the Incident, ' + reportObject['name'].correctAnswer + ' was in ' + reportObject['your location'].correctAnswer
             if (reportObject['what doing']) {
-                reportText += reportObject['what doing'].correctAnswer.toLowerCase() + '. '
+                reportText += ' ' + reportObject['what doing'].correctAnswer.toLowerCase() + '. '
             }
             else {
                 reportText += '. '

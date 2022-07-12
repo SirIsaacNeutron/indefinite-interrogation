@@ -250,14 +250,19 @@ const wrongAnswerReplies = ['You slipped up!', 'Liar! You contradicted yourself.
 "Your responses don't match.", 'Liar!'
 ]
 
+const timedOutReplies = ["You didn't answer in time.", "Can't answer faster than that?", 
+'You took too long to answer.']
+
+const timedOutClosing = ["Innocents wouldn't need so long."]
+
 const correctAnswerVariations = ["Here's your previous answer: ", 'This was what you said before: ',
 'Earlier you said: '
 ]
 
 const questionIntroVariations = ['I see.', 'Interesting.']
 
-function getWrongAnswerReply() {
-    return randomArrayElement(wrongAnswerReplies) + ' ' + randomArrayElement(correctAnswerVariations);
+function getWrongAnswerReply(correctAnswer) {
+    return randomArrayElement(wrongAnswerReplies) + ' ' + randomArrayElement(correctAnswerVariations) + ' ' + correctAnswer;
 }
 
 function getInitialQuestionList(questionsIndices) {
@@ -298,9 +303,25 @@ function getNextQuestionList(questionsIndices) {
     return nextList
 }
 
+function getQuestionText(isFirstQuestion, question) {
+    let displayedText = ''
+    const randomNum = Math.random() * 100
+
+    // 0-9 is ten numbers, so this should have a 10% chance of being called
+    if (randomNum < 10 && !isFirstQuestion) {
+        displayedText = randomArrayElement(questionIntroVariations) + ` ${question.questionText}`
+    }
+    else {
+        displayedText = question.questionText
+    }
+    return displayedText
+}
+
 let questionList = getInitialQuestionList([0])
 let currentListIndex = 0
 let questionsIndices = [0]
+
+let questionText = getQuestionText(true, questionList[0])
 
 function Game(props) {
     const [question, setQuestion] = useState(questionList[currentListIndex])
@@ -309,7 +330,6 @@ function Game(props) {
     console.log(question)
 
     function getNextQuestion() {
-        //setCurrentListIndex(currentListIndex + 1)
         const nextListIndex = currentListIndex + 1
         if (nextListIndex >= questionList.length) {
             const nextQuestionsIndex = questionsIndices[questionsIndices.length - 1] + 1
@@ -348,7 +368,12 @@ function Game(props) {
             const nextQuestion = getNextQuestion()
             setQuestion(nextQuestion)
 
-            props.setScore(props.score + 1)
+            props.setScore(score => score + 1)
+
+            // setQuestion() doesn't seem to update question before this call, so using question here causes a bug
+            // The only way I've gotten this to work is to use questionList[currentListIndex]
+            // to get the current question
+            questionText = getQuestionText(false, questionList[currentListIndex])
 
             if (question.key !== null) {
                 props.setAnsweredQuestions(aq => {
@@ -368,7 +393,11 @@ function Game(props) {
 
             const nextQuestion = getNextQuestion()
             setQuestion(nextQuestion)
-            props.setScore(props.score + 1)
+            props.setScore(score => score + 1)
+
+            questionText = getQuestionText(false, questionList[currentListIndex])
+
+            // We don't need to keep track of already answered questions for the report
         }
         else {
             const wrongAnswerSound = new Audio(buttonWrong)
@@ -388,6 +417,8 @@ function Game(props) {
                 questionsIndices = [0]
                 currentListIndex = 0
                 questionList = getInitialQuestionList(questionsIndices)
+
+                questionText = getQuestionText(true, questionList[0])
     
                 setQuestion(questions[0][0])
 
@@ -400,28 +431,12 @@ function Game(props) {
             }, 3000)
         }
     }
-
-    function getQuestionText() {
-        let displayedText = ''
-        const randomNum = Math.random() * 100
-    
-        // 0-9 is ten numbers, so this should have a 10% chance of being called
-        // props.score can't be 0; otherwise this might get called for the very first question!
-        // That wouldn't match the original game's behavior... 
-        if (randomNum < 10 && props.score !== 0) {
-            displayedText = randomArrayElement(questionIntroVariations) + ` ${question.questionText}`
-        }
-        else {
-            displayedText = question.questionText
-        }
-        return displayedText
-    }
     
     return (
         <>
             <p>{props.score}</p>
-            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply()} ${question.correctAnswer}`
-            : getQuestionText()}</p>
+            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply(question.correctAnswer)}`
+            : questionText}</p>
 
             <div className="container">
                 <div className="row row-eq-height">
