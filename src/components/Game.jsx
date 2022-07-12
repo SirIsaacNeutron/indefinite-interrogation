@@ -256,15 +256,15 @@ const wrongAnswerReplies = ['You slipped up!', 'Liar! You contradicted yourself.
 const timedOutReplies = ["You didn't answer in time.", "Can't answer faster than that?", 
 'You took too long to answer.']
 
-const timedOutClosing = ["Innocents wouldn't need so long."]
-
 const correctAnswerVariations = ["Here's your previous answer: ", 'This was what you said before: ',
 'Earlier you said: '
 ]
 
 const questionIntroVariations = ['I see.', 'Interesting.']
 
-function getWrongAnswerReply(isTimedOut, correctAnswer) {
+function getWrongAnswerReply(isTimedOut, timerSeconds, correctAnswer) {
+    const timedOutClosing = ["Innocents wouldn't need so long.", timerSeconds + ' seconds is more than enough.']
+
     if (isTimedOut) {
         return randomArrayElement(timedOutReplies) + ' ' + randomArrayElement(timedOutClosing)
     }
@@ -367,6 +367,18 @@ function Game(props) {
         return currentQuestion
     }
 
+    function getTimerSeconds() {
+        const currentQuestion = questionList[currentListIndex]
+        if (currentQuestion.hasCorrectAnswer) { 
+            if (props.score >= 20) {
+                return 3
+            }
+            return 4
+        }
+
+        return 5
+    }
+
     function handleClick(answerIndex) {
         // Prevents users from continuing to further questions after wrong answers
         if (props.isGameOver) { return; }
@@ -401,7 +413,7 @@ function Game(props) {
                 })
             }
 
-            countdown.reset({minutes: 0, seconds: 5})
+            countdown.reset({minutes: 0, seconds: getTimerSeconds()})
         }
         else if (chosenAnswer === question.correctAnswer) {
             const buttonSound = new Audio(buttonPress)
@@ -417,7 +429,7 @@ function Game(props) {
 
             // We don't need to keep track of already answered questions for the report
 
-            countdown.reset({minutes: 0, seconds: 5})
+            countdown.reset({minutes: 0, seconds: getTimerSeconds()})
         }
         else {
             countdown.pause()
@@ -462,7 +474,7 @@ function Game(props) {
     return (
         <>
             <p>{props.score}</p>
-            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply(isTimedOut, question.correctAnswer)}`
+            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply(isTimedOut, getTimerSeconds(), question.correctAnswer)}`
             : questionText}</p>
             <p>{countdown.formatted}</p>
 

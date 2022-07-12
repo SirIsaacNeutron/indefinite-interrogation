@@ -186,7 +186,7 @@ function Report(props) {
             const killed = reportObject['how many killed'].correctAnswer
             const name = reportObject['name'].correctAnswer
             if (killed === '0') {
-                additionalInfoText += name + ' claims she did not kill anyone. '
+                additionalInfoText += name + ' claims ' + genderPronoun + ' did not kill anyone. '
             }
             else {
                 additionalInfoText += name + ' admitted to killing ' + killed + ' people. '
