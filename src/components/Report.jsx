@@ -53,6 +53,10 @@ function Report(props) {
             reportText += 'Our subject is ' + name
             genderPronoun = getGenderPronoun(name)
             genderPossessivePronoun = getGenderPossessivePronoun(name)
+
+            if (props.score === 1) {
+                reportText += '.'
+            }
         }
         if (reportObject['how old']) {
             if (reportObject['your occupation']) {
@@ -195,13 +199,25 @@ function Report(props) {
             endText = 'Based on our interrogation, we determined that ' + name + ' was recruited '
             endText += 'by ' + getGenderPossessivePronoun(name) + " sister Clara into Buddhist terrorist group 'Four Truths' to play an unknown role in The Incident."
         }
-        else {
+        // Prevents a crash when score is 0
+        else if (props.score !== 0) {
             const name = reportObject['name'].correctAnswer
-            endText = 'Based on our interrogation, we determined that ' + name + ' was recruited '
-            endText += "into Buddhist terrorist group 'Four Truths' to play an unknown role in The Incident."
+
+            endText = 'Based on our interrogation, we determined that ' + name
+            if (props.score < 8) {
+                endText += ' is likely hiding something about ' + genderPossessivePronoun + ' involvement in The Incident.'
+            }
+            else {
+                endText += " was recruited into Buddhist terrorist group 'Four Truths' to play an unknown role in The Incident."
+            }
         }
 
-        const punishment = 'Punishment: Indefinite detention.'
+        let punishment = 'Punishment: Indefinite detention.'
+
+        if (props.score === 0) {
+            reportText = 'We ended the interrogation after 5 seconds. It is unlikely they would cooperate given more time.'
+            punishment = 'Punishment: Execution.'
+        }
 
         return [reportText, sisterText, additionalInfoText, endText, punishment]
     }

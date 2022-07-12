@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 
+import useCountdown from "@bradgarropy/use-countdown"
+
+
 import buttonPress from '../sounds/button_press.mp3'
 import buttonWrong from '../sounds/wrong_answer.mp3'
 
@@ -261,7 +264,11 @@ const correctAnswerVariations = ["Here's your previous answer: ", 'This was what
 
 const questionIntroVariations = ['I see.', 'Interesting.']
 
-function getWrongAnswerReply(correctAnswer) {
+function getWrongAnswerReply(isTimedOut, correctAnswer) {
+    if (isTimedOut) {
+        return randomArrayElement(timedOutReplies) + ' ' + randomArrayElement(timedOutClosing)
+    }
+
     return randomArrayElement(wrongAnswerReplies) + ' ' + randomArrayElement(correctAnswerVariations) + ' ' + correctAnswer;
 }
 
@@ -325,6 +332,15 @@ let questionText = getQuestionText(true, questionList[0])
 
 function Game(props) {
     const [question, setQuestion] = useState(questionList[currentListIndex])
+    const [isTimedOut, setIsTimedOut] = useState(false)
+
+    const countdown = useCountdown({
+        seconds: 5,
+        onCompleted: () => {
+            setIsTimedOut(true)
+            handleGameOver()
+        }
+    })
 
     const answers = [...question.displayedAnswers]
     console.log(question)
@@ -384,6 +400,8 @@ function Game(props) {
                     return [...aq, newQuestion]
                 })
             }
+
+            countdown.reset({minutes: 0, seconds: 5})
         }
         else if (chosenAnswer === question.correctAnswer) {
             const buttonSound = new Audio(buttonPress)
@@ -398,45 +416,55 @@ function Game(props) {
             questionText = getQuestionText(false, questionList[currentListIndex])
 
             // We don't need to keep track of already answered questions for the report
+
+            countdown.reset({minutes: 0, seconds: 5})
         }
         else {
-            const wrongAnswerSound = new Audio(buttonWrong)
-            wrongAnswerSound.play()
-
-            props.setGameOver(true)
-            
-            setTimeout(() => {
-                // This forEach is required to reset the Question answers;
-                // otherwise they'll keep the correctAnswer from the previous session!
-                questions.forEach(array => {
-                    array.forEach(q => {
-                        q.reset()
-                    })
-                })
-
-                questionsIndices = [0]
-                currentListIndex = 0
-                questionList = getInitialQuestionList(questionsIndices)
-
-                questionText = getQuestionText(true, questionList[0])
-    
-                setQuestion(questions[0][0])
-
-                props.setGameOver(false)
-
-                props.setShowReport(true)
-
-                // Return to Main Menu
-                props.setGameStarted(false)
-            }, 3000)
+            countdown.pause()
+            handleGameOver()
         }
+    }
+
+    function handleGameOver() {
+        const wrongAnswerSound = new Audio(buttonWrong)
+        wrongAnswerSound.play()
+
+        props.setGameOver(true)
+        
+        setTimeout(() => {
+            // This forEach is required to reset the Question answers;
+            // otherwise they'll keep the correctAnswer from the previous session!
+            questions.forEach(array => {
+                array.forEach(q => {
+                    q.reset()
+                })
+            })
+
+            questionsIndices = [0]
+            currentListIndex = 0
+            questionList = getInitialQuestionList(questionsIndices)
+
+            questionText = getQuestionText(true, questionList[0])
+
+            setQuestion(questions[0][0])
+
+            setIsTimedOut(false)
+
+            props.setGameOver(false)
+
+            props.setShowReport(true)
+
+            // Return to Main Menu
+            props.setGameStarted(false)
+        }, 3000)
     }
     
     return (
         <>
             <p>{props.score}</p>
-            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply(question.correctAnswer)}`
+            <p className="game-question">{props.isGameOver ? `${getWrongAnswerReply(isTimedOut, question.correctAnswer)}`
             : questionText}</p>
+            <p>{countdown.formatted}</p>
 
             <div className="container">
                 <div className="row row-eq-height">
